@@ -1,0 +1,16 @@
+config:
+  target: "http://localhost:3000"
+  phases:
+    - duration: 10 # Run for 10 seconds
+      arrivalRate: 200 # 200 requests per second (2,000 total requests)
+      name: "The Thundering Herd"
+  processor: "./processor.js"
+
+scenarios:
+  - name: "Attempt to buy a ticket"
+    flow:
+      - function: "generateUUID"
+      - post:
+          url: "/api/buy"
+          headers:
+            idempotency-key: "{{ idKey }}"
